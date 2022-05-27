@@ -14,6 +14,11 @@
       <template v-slot:item.extra="{ item }">
         <a :href="getItemUrl(item)" target="_blank"> Zusatzinfos </a>
       </template>
+      <template v-slot:item.aktionsname="{ item }">
+        <img :src="getIcon(item)" class="iconimage" />
+        {{ item.aktionsname }}
+      </template>
+
       <template v-slot:item.tableaction="{ item }">
         <v-icon @click.stop="onDblClick(null, {item})">
           mdi-target
@@ -143,7 +148,20 @@ export default {
     },
     getItemUrl(item){
       return `${this.detailUrl}&uuidPublic=${item.uuidPublic}${this.detailParams}`;
+    },
+    getIcon(item) {
+      if (item.type === 'campaign') {
+        return "../../public/users-solid-orange.png";
+      } else {
+        return "../../public/gewaesserretter";
+      }
     }
   },
 };
 </script>
+<style>
+.iconimage {
+  width: 1.4em;
+  height: 1em;
+}
+</style>
