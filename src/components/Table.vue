@@ -29,6 +29,9 @@
               {{ name }} : {{ value }}
               </p>
           </v-card>
+        <v-card>
+          <a :href="getItemUrl(item)" target="_blank"> Zusatzinfos</a>
+        </v-card>
         </td>
       </template>
     </v-data-table>
@@ -44,6 +47,7 @@ export default {
 
   data: () => ({
     expanded: [],
+    detailUrl: process.env.VUE_APP_detailUrl,
     tableOptions: {
       sortBy: ["datum", "veranstalter", "aktionsname"],
       sortDesc: [false, false, false],
@@ -119,6 +123,9 @@ export default {
         this.$emit("update:mapitem", item);
       }
     },
+    getItemUrl(item){
+      return `${this.detailUrl}&uuidPublic=${item.uuidPublic}&uuidViewmode=meeresretter`;
+    }
   },
 };
 </script>

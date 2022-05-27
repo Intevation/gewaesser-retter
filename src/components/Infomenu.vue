@@ -8,6 +8,9 @@
     {{ item.datum }}
     <span v-if="item.uhrzeit"> um {{ item.uhrzeit}} Uhr</span> <br />
     <p v-if="item.beschreibung">{{ item.beschreibung }}</p>
+    <p>
+        <a :href="getItemUrl(item)" target="_blank"> Zusatzinfos</a>
+    </p>
     <iframe
       v-if="item.url"
       :src="item.url"
@@ -28,6 +31,9 @@ export default {
   props: {
     infoItem: Object
   },
+  data: () => ({
+    detailUrl: process.env.VUE_APP_detailUrl
+  }),
   computed: {
     item: {
       get() {
@@ -42,6 +48,9 @@ export default {
   methods: {
     zoomTo() {
       this.$emit('update:zoom', this.infoItem.geometry.coordinates);
+    },
+    getItemUrl(item){
+      return `${this.detailUrl}&uuidPublic=${item.uuidPublic}&uuidViewmode=meeresretter`;
     }
   }
 };
