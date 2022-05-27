@@ -11,6 +11,9 @@
       show-expand
       :expanded.sync="expanded"
     >
+      <template v-slot:item.extra="{ item }">
+        <a :href="getItemUrl(item)" target="_blank"> Zusatzinfos </a>
+      </template>
       <template v-slot:item.tableaction="{ item }">
         <v-icon @click.stop="onDblClick(null, {item})">
           mdi-target
@@ -18,19 +21,27 @@
       </template>
       <template v-slot:expanded-item="{ headers, item }">
         <td :colspan="headers.length">
-          <v-card flat>
+        <v-card flat>
+          <p v-if="item.beschreibung"><b> Beschreibung:</b> <br/>
             {{ item.beschreibung }}
-          </v-card>
-          <v-card flat v-if="item.funde">
-          Funde: <br />
-            <p v-for="(value, name, index) in item.funde" v-bind:value="value"
-              v-bind:key="index" class="intable"
-              >
-              {{ name }} : {{ value }}
-              </p>
-          </v-card>
-        <v-card>
-          <a :href="getItemUrl(item)" target="_blank"> Zusatzinfos</a>
+          </p>
+          <p v-if="item.muell">
+          <b>Gesammelte Gesamtmenge</b><br/>
+            {{item.muell}}
+            <span v-if="item.muell-saecke"> ({{ item.muell-saecke }}) Säcke)</span>
+          </p>
+          <p v-if="item.funde">
+            <b> Funde:</b> <br />
+              <span v-for="(value, name, index) in item.funde" v-bind:value="value"
+                v-bind:key="index">
+                <span v-if="index">, </span>
+                 {{name[0].toUpperCase() + name.substring(1) }} : {{ value }}
+          </span>
+          <p v-if="item.type==='campaign'">
+            <a :href="getItemUrl(item)" target="_blank">
+              Weitere Infos zu Treffpunkt und Kontakt
+            </a>
+          </p>
         </v-card>
         </td>
       </template>
@@ -48,6 +59,7 @@ export default {
   data: () => ({
     expanded: [],
     detailUrl: process.env.VUE_APP_detailUrl,
+    detailParams: process.env.VUE_APP_detailParams,
     tableOptions: {
       sortBy: ["datum", "veranstalter", "aktionsname"],
       sortDesc: [false, false, false],
@@ -83,9 +95,15 @@ export default {
         }
       },
       {
-        text: "Uhrzeit",
+        text: "Gesammelte Menge",
         align: "left",
-        value: "uhrzeit",
+        value: "muell",
+        sortable: false
+      },
+      {
+        text: "",
+        align: "left",
+        value: "extra",
         sortable: false,
       },
       {
@@ -129,9 +147,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.intable::first-letter {
-    text-transform:capitalize;
-}
-</style>
