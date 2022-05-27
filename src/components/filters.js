@@ -13,6 +13,16 @@ const filters = [
     fn: (i) => getDate(i.properties.datum).getFullYear() === year,
   },
   {
+    label: "Nächste zwei Wochen",
+    fn: (i) =>
+    getDate(i.properties.datum) < new Date().setDate(new Date() + 14) &&
+    getDate(i.properties.datum) > new Date(),
+  },
+  {
+    label: "Zukünftig",
+    fn: (i) => getDate(i.properties.datum) > new Date(),
+  },
+  {
     label: (year - 1).toString(),
     fn: (i) => getDate(i.properties.datum).getFullYear() === year - 1,
   },
@@ -31,16 +41,6 @@ const filters = [
   {
     label: `Ältere (vor ${(year - 4).toString()})`,
     fn: (i) => getDate(i.properties.datum).getFullYear() < year - 4,
-  },
-  {
-    label: "Nächste zwei Wochen",
-    fn: (i) =>
-    getDate(i.properties.datum) < new Date().setDate(new Date() + 14) &&
-    getDate(i.properties.datum) > new Date(),
-  },
-  {
-    label: "Zukünftig",
-    fn: (i) => getDate(i.properties.datum) > new Date(),
   },
   {
     label: "Alle",
