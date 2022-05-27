@@ -5,21 +5,25 @@
           mdi-target
         </v-icon></h4>
     <p v-if="item.veranstalter"><i>{{ item.veranstalter }} </i></p>
-    {{ item.datum }}
-    <span v-if="item.uhrzeit"> um {{ item.uhrzeit}} Uhr</span> <br />
-    <p v-if="item.beschreibung">{{ item.beschreibung }}</p>
+
+  <p v-if="item.muell">Gesamtmenge: {{ item.muell }}</p>
+  <p>
+   <span v-if="item.type==='campaign'">Am</span>
+   <span v-if="item.type!='campaign'">Gesammelt am</span>
+    {{ item.datum }} <span v-if="item.uhrzeit"> um {{ item.uhrzeit}}
+    Uhr</span> <br />
+  </p>
+   <p v-if="item.beschreibung">
+    <b> Beschreibung: </b><br />
+    {{ item.beschreibung }}
+   </p>
     <p>
         <a :href="getItemUrl(item)" target="_blank"> Zusatzinfos</a>
     </p>
-    <iframe
-      v-if="item.url"
-      :src="item.url"
-      class="info-iframe"
-      frameBorder="0"
-    />
+    <!-- TODO: Detail button for closed and findings -->
+    <!-- TODO better separation in past and present -->
   </v-card>
 </template>
-
 <script>
 // This is the "popup" for a leaflet map item clicked on Map.vue. It has the
 // infoItem as a property, and should offer short information. The url property
