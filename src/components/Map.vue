@@ -166,14 +166,14 @@ export default {
           const campaign = childs.find(f=> f.feature.properties.type === 'campaign');
           const closed = childs.find(f=> f.feature.properties.type === 'closed');
           let iconClass = "";
-          if (finding) {
-            if (campaign || closed) {
-              iconClass = 'aktionandtrash';
+          if (campaign) {
+            if (finding || closed) {
+              iconClass = 'gewaesserrretteraktion';
             } else {
-              iconClass = 'trash';
+              iconClass = 'aktionpending';
             }
           } else {
-            iconClass = 'aktion'
+            iconClass = 'gewaesserretter'
           }
           return L.divIcon({
             html: '<div class="divIconCluster ' +
@@ -181,7 +181,8 @@ export default {
             '"></div><div class="myMarkerCluster">' +
             cluster.getChildCount() +
             "</div>",
-              iconSize: [40, 40],
+              iconSize: [40, 32],
+              iconAnchor: [20, 16],
               className: ""
             });
         }
@@ -190,15 +191,15 @@ export default {
       const categories = [
         {
           featureFilter: f => f.properties.type === 'finding',
-          iconClass: 'trash'
+          iconClass: 'gewaesserretter'
         },
         {
           featureFilter: f => f.properties.type === 'closed',
-          iconClass: 'aktion-done'
+          iconClass: 'gewaesserretter'
         },
         {
           featureFilter: f => f.properties.type === 'campaign',
-          iconClass: 'aktion'
+          iconClass: 'aktionpending'
         }
       ]
       for (const category of categories ) {
@@ -218,7 +219,8 @@ export default {
                 html: '<div class="divIconCluster ' +
                   category.iconClass +
                   '"</div><div class="myMarkerString" />',
-                iconSize: [40, 40],
+                iconSize: [40, 32],
+                iconAnchor: [20, 16],
                 className: ""
               })
             });
@@ -285,23 +287,6 @@ export default {
         }
       })
     }
-
-    // /**
-    //  * Adds a (pseudo)-legend to the bottom left, currently showing the active
-    //  * filters and total amount of items
-    //  */
-    // addLegend() {
-    //   if (this.map) {
-    //     this.maplegend.remove();
-    //     this.maplegend.onAdd = () => {
-    //       const div = L.DomUtil.create('div', 'legend');
-    //       div.innerHTML = "<i> Aktiver Filter:<br />" +
-    //         this.filterName + ` (${this.trashData.length} Einträge)`;
-    //       return div;
-    //     }
-    //     this.maplegend.addTo(this.map);
-    //   }
-    // }
   }
 
 };
@@ -338,20 +323,16 @@ export default {
   background-size: 40px;
 }
 
-.aktion {
-  background-image: url("../../public/users-solid-grey.png");
+.aktionpending {
+  background-image: url("../../public/users-solid-orange.png");
 }
 
-.aktion-done {
-  background-image: url("../../public/users-solid-grey-done.png");
+.gewaesserretter {
+  background-image: url("../../public/gewaesserretter.png");
 }
 
-.trash {
-  background-image: url("../../public/recycle-grey.png");
-}
-
-.aktionandtrash {
-  background-image: url("../../public/users-recycling.png");
+.gewaesserrretteraktion {
+  background-image: url("../../public/retterundaktion.png");
 }
 
 .myMarkerCluster {
