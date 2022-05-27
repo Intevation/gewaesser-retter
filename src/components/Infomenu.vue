@@ -32,7 +32,8 @@ export default {
     infoItem: Object
   },
   data: () => ({
-    detailUrl: process.env.VUE_APP_detailUrl
+    detailUrl: process.env.VUE_APP_detailUrl,
+    detailParams: process.env.VUE_APP_detailParams
   }),
   computed: {
     item: {
@@ -50,7 +51,7 @@ export default {
       this.$emit('update:zoom', this.infoItem.geometry.coordinates);
     },
     getItemUrl(item){
-      return `${this.detailUrl}&uuidPublic=${item.uuidPublic}&uuidViewmode=meeresretter`;
+      return `${this.detailUrl}&uuidPublic=${item.uuidPublic}${this.detailParams}`;
     }
   }
 };

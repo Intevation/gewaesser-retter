@@ -124,7 +124,7 @@ export default {
       }
     },
     getItemUrl(item){
-      return `${this.detailUrl}&uuidPublic=${item.uuidPublic}&uuidViewmode=meeresretter`;
+      return `${this.detailUrl}&uuidPublic=${item.uuidPublic}${this.detailParams}`;
     }
   },
 };
