@@ -32,7 +32,7 @@
           />
           </v-list-item>
           <v-list-item @click="zoomToWorld">
-            Ausdehnung: Deutschland
+            Kartenansicht zurücksetzen
           </v-list-item>
           <v-list-item @click="geolocate">
             Finde meine Position
