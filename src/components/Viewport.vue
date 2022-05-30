@@ -20,7 +20,7 @@
     <v-navigation-drawer v-model="drawer" absolute class="top" temporary>
       <v-list nav dense>
         <v-list-item-group>
-          <v-list-item-title>Filter: {{ filterName }} </v-list-item-title>
+          <v-list-item-title>Filter: {{ filterNameView }} </v-list-item-title>
           <v-list-item>
             <v-select
             v-model="filterName"
@@ -105,7 +105,9 @@ export default {
     filterOptions: filters,
     filterFn: filters[0].fn,
     filterName: filters[0].label,
+    filterNameView: filters[0].label,
     infoItem: null,
+    queriedItemUuid: null,
     tab: 0,
     firebaseConfig: {
       apiKey: process.env.VUE_APP_apiKey,
@@ -118,6 +120,11 @@ export default {
     },
   }),
   mounted() {
+    let qParams = new URLSearchParams(window.location.search);
+    let uuid = qParams.get("uuid");
+    if (uuid !== undefined) {
+      this.queriedItemUuid = uuid;
+    }
     this.$root.$on("update:error", (error) => this.showError(error));
     this.useFireBase();
     window.addEventListener('resize', () => this.$root.$emit('resizeevent'));
@@ -143,21 +150,21 @@ export default {
     updateFilter() {
       const filter = this.filterOptions.find(f => this.filterName === f.label);
       this.filterFn = filter.fn ? filter.fn : () => true;
-      this.filterName = `${filter.label} (${this.trashData.length} Einträge)`;
+      this.filterNameView = `${filter.label} (${this.filteredTrashData.length} Einträge)`;
       this.drawer = false;
     },
     updateItem(e) {
       this.infoItem = e;
       this.tab = 0;
     },
-      zoomToWorld() {
-  this.$root.$emit("requestzoom", {latlng: {lat: 51, lng: 10}, level: 5});
-  this.drawer = false;
-  },
-  geolocate() {
-    this.$root.$emit("geolocateme");
-    this.drawer = false;
-  },
+    zoomToWorld() {
+      this.$root.$emit("requestzoom", {latlng: {lat: 51, lng: 10}, level: 5});
+      this.drawer = false;
+    },
+    geolocate() {
+      this.$root.$emit("geolocateme");
+      this.drawer = false;
+    },
 
     showError(error) {
       this.snackbar = true;
@@ -188,6 +195,21 @@ export default {
             list[idx] = data;
           } else {
             list.push(data);
+          }
+          if (this.queriedItemUuid) {
+            if (this.queriedItemUuid === snap.key) {
+              // select item
+              this.updateItem(data)
+              let coords = { lat: data.geometry.coordinates[1], lng: data.geometry.coordinates[0] }
+              this.$root.$emit("requestzoom", { latlng: coords });
+              // apply correct filter
+              const a = data.properties.datum.split('.');
+              let date = new Date(`${a[2]}-${a[1]}-${a[0]}`);
+              if (date.getFullYear() != new Date().getFullYear()) {
+                this.filterName = `${date.getFullYear()}`;
+              }
+              this.updateFilter()
+            }
           }
         }
       });
