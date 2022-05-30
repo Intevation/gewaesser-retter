@@ -1,10 +1,14 @@
 <template>
   <v-card v-if="item" elevation="5" class="infomenu-card">
     <h4>{{ item.aktionsname }}
-      <a :href="item.placelink">(link)</a>
-      <v-icon @click.stop="zoomTo()">
+      <v-icon @click.stop="zoomTo()" class="zoom-button">
           mdi-target
       </v-icon>
+      <a :href="item.placelink" class="share-button">
+        <v-icon>
+            mdi-share-variant
+        </v-icon>
+      </a>
     </h4>
     <p v-if="item.veranstalter"><i>{{ item.veranstalter }} </i></p>
 
@@ -78,5 +82,11 @@ export default {
   overflow-y: auto;
   border-radius: 10px !important;
   padding: 5px;
+}
+.zoom-button {
+  text-decoration: none;
+}
+.share-button {
+  text-decoration: none;
 }
 </style>
