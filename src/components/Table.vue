@@ -6,6 +6,8 @@
       item-key="uuidPublic"
       :options="tableOptions"
       :items-per-page="10"
+      :search="searchterm"
+      :custom-filter="filterByUuid"
       no-data-text="Keine Daten gefunden"
       @dblclick:row="onDblClick"
       show-expand
@@ -64,6 +66,7 @@ export default {
 
   data: () => ({
     expanded: [],
+    searchterm: "",
     detailUrl: process.env.VUE_APP_detailUrl,
     detailParams: process.env.VUE_APP_detailParams,
     tableOptions: {
@@ -115,7 +118,7 @@ export default {
       {
         text: "",
         value: "data-table-expand"
-        },
+      },
     ],
     currentData: []
   }),
@@ -131,8 +134,17 @@ export default {
     } else {
       this.sortData();
     }
+    this.$root.$on('update:tableitem', this.focusInfoItem);
   },
   methods: {
+    focusInfoItem(uuid) {
+      this.searchterm = uuid
+    },
+
+    filterByUuid(value, search, item) {
+      return item.uuidPublic === search
+    },
+
     sortData() {
       this.currentData = this.trashData.map(f => f.properties);
     },

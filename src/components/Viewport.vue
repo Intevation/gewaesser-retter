@@ -125,6 +125,7 @@ export default {
     if (uuid !== undefined) {
       this.queriedItemUuid = uuid;
     }
+    this.$root.$on("update:tableitem", () => this.updateItemTable());
     this.$root.$on("update:error", (error) => this.showError(error));
     this.useFireBase();
     window.addEventListener('resize', () => this.$root.$emit('resizeevent'));
@@ -156,6 +157,9 @@ export default {
     updateItem(e) {
       this.infoItem = e;
       this.tab = 0;
+    },
+    updateItemTable() {
+      this.tab = 1;
     },
     zoomToWorld() {
       this.$root.$emit("requestzoom", {latlng: {lat: 51, lng: 10}, level: 5});
