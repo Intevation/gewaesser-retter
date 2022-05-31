@@ -37,11 +37,12 @@
           </p>
           <p v-if="item.funde">
             <b> Funde:</b> <br />
-              <span v-for="(value, name, index) in item.funde" v-bind:value="value"
+            <span v-for="(value, name, index) in item.funde" v-bind:value="value"
                 v-bind:key="index">
-                <span v-if="index">, </span>
-                 {{name[0].toUpperCase() + name.substring(1) }} : {{ value }}
-          </span>
+              <span v-if="index">, </span>
+              {{name[0].toUpperCase() + name.substring(1) }} : {{ value }}
+            </span>
+          </p>
           <p v-if="item.type==='campaign'">
             <a :href="getItemUrl(item)" target="_blank">
               Weitere Infos zu Treffpunkt und Kontakt
@@ -66,8 +67,8 @@ export default {
     detailUrl: process.env.VUE_APP_detailUrl,
     detailParams: process.env.VUE_APP_detailParams,
     tableOptions: {
-      sortBy: ["datum", "veranstalter", "aktionsname"],
-      sortDesc: [false, false, false],
+      sortBy: ["datum"],
+      sortDesc: [false],
       mustSort: true
     },
     tableHeader: [
