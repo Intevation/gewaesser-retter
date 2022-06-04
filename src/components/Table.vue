@@ -11,14 +11,10 @@
       show-expand
       :expanded.sync="expanded"
     >
-      <template v-slot:item.extra="{ item }">
-        <a :href="getItemUrl(item)" target="_blank"> Zusatzinfos </a>
-      </template>
       <template v-slot:item.aktionsname="{ item }">
         <img :src="getIcon(item)" class="iconimage" />
         {{ item.aktionsname }}
       </template>
-
       <template v-slot:item.tableaction="{ item }">
         <v-icon @click.stop="onDblClick(null, {item})">
           mdi-target
@@ -27,8 +23,12 @@
       <template v-slot:expanded-item="{ headers, item }">
         <td :colspan="headers.length">
         <v-card flat>
+          <p></p>
           <p v-if="item.beschreibung"><b> Beschreibung:</b> <br/>
             {{ item.beschreibung }}
+          </p>
+          <p>
+            <a :href="getItemUrl(item)" target="_blank"> Zusatzinfos </a>
           </p>
           <p v-if="item.muell">
           <b>Gesammelte Gesamtmenge</b><br/>
@@ -101,7 +101,7 @@ export default {
         }
       },
       {
-        text: "Gesammelte Menge",
+        text: "Gesammelte Menge (in kg)",
         align: "left",
         value: "muell",
         sortable: false
