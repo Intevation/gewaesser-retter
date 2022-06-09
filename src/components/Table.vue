@@ -37,9 +37,6 @@
           <p v-if="item.beschreibung"><b> Beschreibung:</b> <br/>
             {{ item.beschreibung }}
           </p>
-          <p>
-            <a :href="getItemUrl(item)" target="_blank"> Zusatzinfos </a>
-          </p>
           <p v-if="item.muell">
           <b>Gesammelte Gesamtmenge</b><br/>
             {{item.muell}}
@@ -53,7 +50,7 @@
               {{name[0].toUpperCase() + name.substring(1) }} : {{ value }}
             </span>
           </p>
-          <p v-if="item.type==='campaign'">
+          <p>
             <a :href="getItemUrl(item)" target="_blank">
               Weitere Infos zu Treffpunkt und Kontakt
             </a>

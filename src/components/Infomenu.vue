@@ -27,7 +27,9 @@
     {{ item.beschreibung }}
    </p>
     <p>
-        <a :href="getItemUrl(item)" target="_blank"> Zusatzinfos</a>
+      <a :href="getItemUrl(item)" target="_blank">
+        Weitere Infos zu Treffpunkt und Kontakt
+      </a>
     </p>
     <!-- TODO: Detail button for closed and findings -->
     <!-- TODO better separation in past and present -->
