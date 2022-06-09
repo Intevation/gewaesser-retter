@@ -152,9 +152,9 @@ export default {
     },
     getIcon(item) {
       if (item.type === 'campaign') {
-        return "../../public/users-solid-orange.png";
+        return "users-solid-orange.png";
       } else {
-        return "../../public/gewaesserretter";
+        return "gewaesserretter.png";
       }
     }
   },
@@ -164,5 +164,6 @@ export default {
 .iconimage {
   width: 1.4em;
   height: 1em;
+  margin-right: 0.5em;
 }
 </style>
