@@ -4,6 +4,9 @@
       <v-icon @click.stop="zoomTo()" class="zoom-button">
           mdi-target
       </v-icon>
+      <v-icon @click.stop="showInTable()" class="table-button">
+          mdi-table
+      </v-icon>
       <a :href="item.placelink" class="share-button">
         <v-icon>
             mdi-share-variant
@@ -65,6 +68,10 @@ export default {
     },
     getItemUrl(item){
       return `${this.detailUrl}&uuidPublic=${item.uuidPublic}${this.detailParams}`;
+    },
+    showInTable() {
+      this.$root.$emit("update:tab", 1);
+      this.$root.$emit('update:tableuuidfilter', this.infoItem.properties.uuidPublic);
     }
   }
 };

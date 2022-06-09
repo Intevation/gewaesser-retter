@@ -68,6 +68,7 @@
         <v-tab-item>
           <Table
             v-bind:trashData="filteredTrashData"
+            v-bind:uuidFilter="tableUuidFilter"
             v-on:update:mapitem="updateItem"
             v-on:update:filter="updateFilter"
           />
@@ -106,6 +107,7 @@ export default {
     filterFn: filters[0].fn,
     filterName: filters[0].label,
     filterNameView: filters[0].label,
+    tableUuidFilter: "",
     infoItem: null,
     queriedItemUuid: null,
     tab: 0,
@@ -119,13 +121,22 @@ export default {
       appId: process.env.VUE_APP_messagingSenderId,
     },
   }),
+  watch: {
+    tab() {
+      if (this.tab == 0) {
+        this.$root.$emit('update:tableuuidfilter', null);
+      }
+    }
+  },
   mounted() {
     let qParams = new URLSearchParams(window.location.search);
     let uuid = qParams.get("uuid");
     if (uuid !== undefined) {
       this.queriedItemUuid = uuid;
     }
+    this.$root.$on("update:tab", (i) => this.switchTab(i));
     this.$root.$on("update:error", (error) => this.showError(error));
+    this.$root.$on("update:tableuuidfilter", (s) => this.setTableUuidFilter(s));
     this.useFireBase();
     window.addEventListener('resize', () => this.$root.$emit('resizeevent'));
   },
@@ -155,7 +166,12 @@ export default {
     },
     updateItem(e) {
       this.infoItem = e;
-      this.tab = 0;
+    },
+    switchTab(i) {
+      this.tab = i;
+    },
+    setTableUuidFilter(s) {
+      this.tableUuidFilter = s;
     },
     zoomToWorld() {
       this.$root.$emit("requestzoom", {latlng: {lat: 51, lng: 10}, level: 5});

@@ -1,11 +1,21 @@
 <template>
   <v-card>
+    <v-text-field class="searchbar"
+        v-model="searchterm"
+        append-icon="mdi-magnify"
+        label="Filter"
+        single-line
+        clearable
+        hide-details
+    ></v-text-field>
     <v-data-table
       :headers="tableHeader"
       :items="currentData"
       item-key="uuidPublic"
       :options="tableOptions"
       :items-per-page="10"
+      :search="searchterm"
+      :custom-filter="filterUuidFirst"
       no-data-text="Keine Daten gefunden"
       @dblclick:row="onDblClick"
       show-expand
@@ -59,11 +69,13 @@
 
 export default {
   props: {
+    uuidFilter: String,
     trashData: Array
   },
 
   data: () => ({
     expanded: [],
+    searchterm: "",
     detailUrl: process.env.VUE_APP_detailUrl,
     detailParams: process.env.VUE_APP_detailParams,
     tableOptions: {
@@ -115,7 +127,7 @@ export default {
       {
         text: "",
         value: "data-table-expand"
-        },
+      },
     ],
     currentData: []
   }),
@@ -123,6 +135,9 @@ export default {
     // watcher that triggers as soon as trashData gets an update.
     trashData() {
       this.sortData();
+    },
+    uuidFilter() {
+      this.searchterm = this.uuidFilter;
     }
   },
   mounted() {
@@ -131,8 +146,17 @@ export default {
     } else {
       this.sortData();
     }
+    this.searchterm= this.uuidFilter;
   },
   methods: {
+    filterUuidFirst(value, search, item) {
+      return search != null && (
+        item != null && item.uuidPublic === search ||
+        value != null && typeof value !== 'boolean' &&
+          value.toString().toLocaleLowerCase().indexOf(search.toLocaleLowerCase()) !== -1 
+      )
+    },
+
     sortData() {
       this.currentData = this.trashData.map(f => f.properties);
     },
@@ -145,6 +169,7 @@ export default {
           lng: item.geometry.coordinates[0]
       }});
         this.$emit("update:mapitem", item);
+        this.$root.$emit("update:tab", 0);
       }
     },
     getItemUrl(item){
@@ -165,5 +190,8 @@ export default {
   width: 1.4em;
   height: 1em;
   margin-right: 0.5em;
+}
+.searchbar {
+  margin: 10px 15%
 }
 </style>
